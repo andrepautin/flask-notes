@@ -10,7 +10,7 @@
 <h2>Notes</h2>
 <ul>
     {% for note in user.notes %}
-        <li>
+        <li>{{note.title}}
             <form>
                 <a href="/notes/{{note.id}}/update">Edit</a>
                 <button formaction="/notes/{{note.id}}/delete" formmethod="POST">Delete</button>
@@ -19,4 +19,8 @@
 
     {% endfor %}
 </ul>
+<a href="/users/{{user.username}}/notes/add">Add Note</a>
+<form action="/logout" method="POST">
+    <button>Log Out</button>
+</form>
 {% endblock %}
