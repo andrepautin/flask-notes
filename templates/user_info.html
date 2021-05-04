@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title%} {{user.username}}'s Details {% endblock %}
+{% block content %}
+<h1>{{user.first_name}} {{user.last_name}}</h1>
+<h4>{{user.email}}</h4>
+
+<h2>Notes</h2>
+<ul>
+    {% for note in user.notes %}
+        <li>
+            <form>
+                <a href="/notes/{{note.id}}/update">Edit</a>
+                <button formaction="/notes/{{note.id}}/delete" formmethod="POST">Delete</button>
+            </form>
+        </li>
+
+    {% endfor %}
+</ul>
+{% endblock %}

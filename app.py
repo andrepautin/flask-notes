@@ -30,19 +30,23 @@ def register_user():
         first_name = form.first_name.data
         last_name = form.last_name.data
 
-        user = User(
-            username=username, 
-            password=password, 
-            email=email, 
-            first_name=first_name, 
-            last_name=last_name)
+        curr_users = User.query("username").all()
+        if username in curr_users:
+            form.username.errors["Username already exists!"]
+        else:
+            user = User(
+                username=username, 
+                password=password, 
+                email=email, 
+                first_name=first_name, 
+                last_name=last_name)
 
-        db.session.add(user)
-        db.session.commit()
+            db.session.add(user)
+            db.session.commit()
 
-        session["username"] = user.username
+            session["username"] = user.username
 
-        return redirect("/secret")
+            return redirect("/secret")
 
     else:
         return render_template("register_user_form.html", form=form)
@@ -67,10 +71,25 @@ def login():
     else:
         return render_template("login_form.html", form=form)
             
-@app.route("/secret")
-def secret():
-    """ render secret html """
-    return "You made it!"
+@app.route("/users/<username>")
+def secret(username):
+    """ show details of user if they are logged in """
+
+    if session["username"] == username:
+        user = User.query.get(username)
+        return render_template("user_info.html", user=user)
+    else:
+        return redirect("/login")
+
+
+
+@app.route("/logout")
+def logout():
+    """ logs a user out and redirects to homepage"""
+    session.pop("username", None)
+    return redirect("/")
+
+
 
 
 
