@@ -3,6 +3,9 @@
 {% block content %}
 <h1>{{user.first_name}} {{user.last_name}}</h1>
 <h4>{{user.email}}</h4>
+<form action="/users/{{ user.username }}/delete" method="POST">
+    <button>Delete Account</button>
+</form>
 
 <h2>Notes</h2>
 <ul>

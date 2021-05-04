@@ -72,7 +72,7 @@ def login():
         return render_template("login_form.html", form=form)
             
 @app.route("/users/<username>")
-def secret(username):
+def display_user_info(username):
     """ show details of user if they are logged in """
 
     if session["username"] == username:
@@ -89,8 +89,42 @@ def logout():
     session.pop("username", None)
     return redirect("/")
 
+@app.route("/users/<username>/delete", methods=["POST"])
+def delete_user(username):
 
+    user = User.query.get(username)
+    notes = Note.query.filter("owner"==user.username).all()
 
+    for note in notes:
+        db.session.delete(note)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    session.pop("username", None)
+    return redirect("/")
+
+@app.route("/users/<username>/notes/add", methods=["GET", "POST"])
+def add_notes(username):
+    if session["username"] == username:
+        user = User.query.get(username)
+        form = AddNoteForm()
+
+        if form.validate_on_submit:
+            title = form.title.data
+            content = form.content.data
+
+            note = Note(title=title, content=content, owner=username)
+            db.session.add(note)
+            db.session.commit()
+
+            return redirect(f"/user/{username}")
+            
+        else:
+            render_template("add_notes_form.html", form=form)      
+    
+    else:
+        return redirect("/login")      
 
 
         
