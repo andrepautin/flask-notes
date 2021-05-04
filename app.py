@@ -47,6 +47,31 @@ def register_user():
     else:
         return render_template("register_user_form.html", form=form)
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """ renders log in form; authenticates login info """
+    form = LoginUserForm()
+
+    if form.validate_on_submit:
+        username=form.username.data
+        password=form.password.data
+
+        user = User.authenticate(username, password)
+
+        if user:
+            session["username"] = user.username
+            return redirect("/secret")
+        else:
+            form.username.errors = ["Bad name/password"]    
+
+    else:
+        return render_template("login_form.html", form=form)
+            
+@app.route("/secret")
+def secret():
+    """ render secret html """
+    return "You made it!"
+
 
 
         
