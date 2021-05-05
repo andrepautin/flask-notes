@@ -4,6 +4,7 @@
 <h1>{{user.first_name}} {{user.last_name}}</h1>
 <h4>{{user.email}}</h4>
 <form action="/users/{{ user.username }}/delete" method="POST">
+    {{ form.hidden_tag() }}
     <button>Delete Account</button>
 </form>
 

@@ -4,6 +4,7 @@ from models import db, User, Note
 db.drop_all()
 db.create_all()
 
+# create new users
 user1 = User.register(
     username="andrepautin",
     password="itsasecret",
@@ -19,9 +20,12 @@ user2 = User.register(
     first_name="celine",
     last_name="yu"
 )
+
+# add and commit users to database
 db.session.add_all([user1, user2])
 db.session.commit()
 
+#create notes
 note1 = Note(
     title="Seed Title",
     content="blah blah blah",
@@ -34,5 +38,6 @@ note2 = Note(
     owner=user2.username
 )
 
+#add and commit notes to database
 db.session.add_all([note1, note2])
 db.session.commit()

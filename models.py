@@ -5,19 +5,25 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 
 class User(db.Model):
-    """creates a user instance"""
+    """creates a new user instance"""
 
     __tablename__ = "users"
 
-    username = db.Column(db.String(20), primary_key=True)
+    username = db.Column(db.String(20), 
+                            primary_key=True)
 
-    password = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, 
+                            nullable=False)
 
-    email = db.Column(db.String(50), nullable=False, unique=True)
+    email = db.Column(db.String(50), 
+                        nullable=False, 
+                        unique=True)
 
-    first_name = db.Column(db.String(30), nullable=False)
+    first_name = db.Column(db.String(30), 
+                            nullable=False)
     
-    last_name = db.Column(db.String(30), nullable=False)
+    last_name = db.Column(db.String(30), 
+                            nullable=False)
 
     notes = db.relationship("Note", backref="user")
 
@@ -27,7 +33,7 @@ class User(db.Model):
 
         hashed = bcrypt.generate_password_hash(password).decode('utf8')
 
-        # return instance of user w/username and hashed pwd
+        # return instance of user w/username and hashed pwd - can add db.session.add to consolidate
         return cls(
             username=username, 
             password=hashed, 
@@ -51,20 +57,22 @@ class User(db.Model):
             return False    
 
 class Note(db.Model):
-    """ creates a new note """
+    """ creates a new note instance """
 
     __tablename__ = "notes"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, 
+                    primary_key=True)
 
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), 
+                        nullable=False)
 
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text, 
+                        nullable=False)
 
-    owner = db.Column(db.String(), db.ForeignKey("users.username"))
-
-
-
+    owner = db.Column(db.String(), 
+                        db.ForeignKey("users.username"),
+                        nullable=False)
 
 
 def connect_db(app):
